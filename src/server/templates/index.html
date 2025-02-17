@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ChatGPT Color Therapy</title>
+    <style>
+        #chat-box {
+            width: 80%;
+            height: 300px;
+            overflow-y: scroll;
+            margin: 20px auto;
+            border: 1px solid #ccc;
+            padding: 10px;
+        }
+        #user-input {
+            width: 80%;
+            margin: 10px auto;
+            padding: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Color Therapy System</h1>
+
+<div id="chat-box"></div>
+
+<form id="chat-form">
+    <input type="text" id="user-input" placeholder="Ask for a color therapy...">
+    <button type="submit" id="submit-btn">Ask</button>
+</form>
+
+<script>
+    const chatForm = document.getElementById('chat-form');
+    const chatBox = document.getElementById('chat-box');
+    const userInput = document.getElementById('user-input');
+    const submitButton = document.getElementById('submit-btn');  // Button reference
+
+    chatForm.addEventListener('submit', async function (e) {
+        e.preventDefault();
+
+        // Disable the button to prevent multiple submissions
+        submitButton.disabled = true;
+
+        const prompt = userInput.value;
+
+        userInput.value = '';  // Clear input field
+        chatBox.innerHTML += `<b>You:</b> ${prompt}<br>`;
+
+        try {
+            const response = await fetch('/talk', {
+                method: 'POST',
+                body: new URLSearchParams({ 'prompt': prompt }),
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+            });
+
+            const data = await response.json();
+            if (data.response) {
+                chatBox.innerHTML += `<b>ChatGPT:</b> ${data.response}<br>`;
+            } else {
+                chatBox.innerHTML += `<b>Error:</b> ${data.error}<br>`;
+            }
+
+            chatBox.scrollTop = chatBox.scrollHeight;  // Auto-scroll
+        } catch (error) {
+            chatBox.innerHTML += `<b>Error:</b> Unable to fetch response from the server.<br>`;
+            console.error('Error:', error);
+        } finally {
+            // Re-enable the button after the request finishes (success or error)
+            submitButton.disabled = false;
+        }
+    });
+</script>
+</body>
+</html>
+
