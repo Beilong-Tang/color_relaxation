@@ -47,7 +47,7 @@
 
         userInput.value = '';  // Clear input field
         chatBox.innerHTML += `<b>You:</b> ${prompt}<br>`;
-
+    
         try {
             const response = await fetch('/talk', {
                 method: 'POST',
@@ -58,6 +58,8 @@
             const data = await response.json();
             if (data.response) {
                 chatBox.innerHTML += `<b>ChatGPT:</b> ${data.response}<br>`;
+                // Insert the play button for the audio after the response
+                insertAudioPlayer(data.response);
             } else {
                 chatBox.innerHTML += `<b>Error:</b> ${data.error}<br>`;
             }
@@ -71,6 +73,38 @@
             submitButton.disabled = false;
         }
     });
+
+    function insertAudioPlayer(responseText) {
+        // Generate a unique audio URL
+        const audioUrl = `/generate_speech?text=${encodeURIComponent(responseText)}`;
+
+        // Create an HTML audio element
+        const audioPlayerHTML = `
+            <div>
+                <b>Audio:</b>
+                <audio controls>
+                    <source src="${audioUrl}" type="audio/wav">
+                    Your browser does not support the audio element.
+                </audio>
+            </div>
+        `;
+        chatBox.innerHTML += audioPlayerHTML;
+    }
+
+    function playAudio(text) {
+        try {
+            // For now, you can simulate the audio using a URL like '/fake-audio'
+            const audioUrl = '/static/fileid_1.wav';  // Endpoint to generate audio
+            const audio = new Audio(audioUrl);
+            audio.play().then(() => {
+                console.log('Audio played successfully');
+            }).catch((err) => {
+                console.error('Error playing audio:', err);
+            });
+        } catch (error) {
+            console.error('Error generating speech:', error);
+        }
+    }
 </script>
 </body>
 </html>
