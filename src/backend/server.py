@@ -42,8 +42,7 @@ def generate_sim():
         for audio in audio_sim:
             audio_path = None
             with tempfile.NamedTemporaryFile(delete=False, suffix='.wav') as temp_file:
-
-                sf.write(temp_file, audio)
+                sf.write(temp_file, audio, samplerate= 24000)
                 audio_path = temp_file.name
             with open(audio_path, "rb") as fwav:
                 # chunk_size = 10 * 24000 * 2 * 2  # 5 sec * 24kHz * 2 channels * 16-bit (2 bytes per sample)
