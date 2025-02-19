@@ -76,7 +76,10 @@
 
     function insertAudioPlayer(responseText) {
         // Generate a unique audio URL
-        const audioUrl = `/generate_speech?text=${encodeURIComponent(responseText)}`;
+
+        const audioUrl = `http://127.0.0.1:5000/wav?text=${responseText}`
+
+      
 
         // Create an HTML audio element
         const audioPlayerHTML = `

@@ -32,16 +32,16 @@ def talk():
     return jsonify({"response": message})
 
 
-@app.route('/generate_speech')
-def gen_speech():
-    text = request.args.get('text', '')
-
-    logger.info(f"Gen Speech get text: {text[:100]}...")
-    
-    fake_audio_path = r"static\fileid_1.flac"
-
-    return send_file(fake_audio_path, mimetype='audio/mpeg')
+# @app.route('/generate_speech')
+# def gen_speech():
+#     text = request.args.get('text', '')
+#
+#     logger.info(f"Gen Speech get text: {text[:100]}...")
+#     
+#     fake_audio_path = r"static\fileid_1.flac"
+#
+#     return send_file(fake_audio_path, mimetype='audio/mpeg')
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=True, port=8000)
     pass

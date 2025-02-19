@@ -1,56 +1,59 @@
-from flask import Flask, Response, render_template
-import wave
+from flask import Flask, Response, render_template, request
+import os 
+import sys 
+import tempfile
+import soundfile as sf
+sys.path.append(os.path.dirname(os.getcwd()))
+from utils import setup_logger
+logger = setup_logger(__name__)
+
 import time
 
-app = Flask(__name__)
+DEVICE="cuda:4"
 
-@app.route("/wav")
+logger.info("Inializeing Model, this can take 30mins")
 
-# def generate_sim():
-#     ## Read an audio 
-#
-#     audio_sim = "static/example_red_color.wav"
-#     
-#     ## yield an audio
-#     while True:
-#         yield audio_sim[:int(5 * 24000)]
-#         time.sleep(5)
-#
-# def streamwav():
-#     def generate():
-#         data = generate_sim()
-#         while data is not None:
-#             with open(data, "rb") as fwav:
-#                 data = fwav.read(1024)
-#                 while data:
-#                     yield data
-#                     data = fwav.read(1024)
-#     return Response(generate(), mimetype="audio/x-wav")
+from fireredtts.fireredtts import FireRedTTS
+
+tts = FireRedTTS(
+    config_path="configs/config_24k.json",
+    pretrained_path="pretrained_models",
+    device=DEVICE
+)
+rec_wav = tts.synthesize(
+    prompt_wav="examples/prompt_1.wav",
+        text="Hello World",
+        lang="en",
+)
+logger.info("Model intialized perfectly")
+
+app = Flask("Backend Server")
 
 # Simulating audio generation
+@app.route('/wav')
 def generate_sim():
-    audio_sim = "/DKUdata/tangbl/tts/FireRedTTS/example_red_color.wav"
-    
-    # Open the audio file once to stream data
-    with open(audio_sim, "rb") as fwav:
-        # Read in chunks and simulate the periodic generation
-        while True:
-            # Yield a 5-second chunk of audio (assuming 24000 sample rate, 2 channels, 16-bit audio)
-            # Here we simulate reading 5 seconds of audio data
-            data = fwav.read(int(5 * 24000 * 2 ))  # Assuming stereo 16-bit audio (2 channels)
-            if not data:
-                break  # If no more data, stop the loop
-            yield data
-            time.sleep(5)  # Simulate periodic generation of audio
+    text = request.args.get("text", "")  # ✅ Capture text before the generator starts
 
-@app.route("/audio")
-def streamwav():
-    def generate():
-        audio_gen = generate_sim()  # Get the audio chunks from the generator
-        for chunk in audio_gen:
-            yield chunk  # Stream each chunk of audio
-        
-    return Response(generate(), mimetype="audio/x-wav")
+    def generate(text):
+        logger.info(f"Get Text {text}")
+        audio_sim = tts.synthesize_split(
+            prompt_wav = "static/prompt_1.wav",
+            text=text,
+            lang="en" ## Support english for now
+        )
+        for audio in audio_sim:
+            audio_path = None
+            with tempfile.NamedTemporaryFile(delete=False, suffix='.wav') as temp_file:
+                sf.write(temp_file, audio)
+                audio_path = temp_file.name
+            with open(audio_path, "rb") as fwav:
+                # chunk_size = 10 * 24000 * 2 * 2  # 5 sec * 24kHz * 2 channels * 16-bit (2 bytes per sample)
+                data = fwav.read()
+                if not data:
+                    break  # End of file
+                yield data
+    return Response(generate(text), mimetype="audio/wav")  # ✅ Correct MIME type for audio
+
 
 
 @app.route("/")
