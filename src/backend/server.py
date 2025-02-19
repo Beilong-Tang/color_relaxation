@@ -14,8 +14,8 @@ logger.info("Inializeing Model, this can take 30mins")
 from fireredtts.fireredtts import FireRedTTS
 
 tts = FireRedTTS(
-    config_path="configs/config_24k.json",
-    pretrained_path="pretrained_models",
+    config_path="/DKUdata/tangbl/tts/FireRedTTS/configs/config_24k.json",
+    pretrained_path="/DKUdata/tangbl/tts/FireRedTTS/pretrained_models",
     device=DEVICE
 )
 rec_wav = tts.synthesize(
@@ -42,7 +42,8 @@ def generate_sim():
         for audio in audio_sim:
             audio_path = None
             with tempfile.NamedTemporaryFile(delete=False, suffix='.wav') as temp_file:
-                sf.write(temp_file, audio, samplerate=24000)
+
+                sf.write(temp_file, audio)
                 audio_path = temp_file.name
             with open(audio_path, "rb") as fwav:
                 # chunk_size = 10 * 24000 * 2 * 2  # 5 sec * 24kHz * 2 channels * 16-bit (2 bytes per sample)
