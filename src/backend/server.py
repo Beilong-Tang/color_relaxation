@@ -2,7 +2,9 @@ from flask import Flask, Response, jsonify, render_template, request
 import os 
 import sys 
 import tempfile
+import torchaudio
 import soundfile as sf
+import time 
 sys.path.append(os.path.dirname(os.getcwd()))
 from utils import setup_logger
 logger = setup_logger(__name__)
@@ -37,17 +39,24 @@ def generate_sim():
 
     def generate(text):
         logger.info(f"Get Text {text}")
+        print("Synthesizeing audio")
         audio_sim = tts.synthesize_split(
             prompt_wav = "static/prompt_1.wav",
             text=text,
             lang="en" ## Support english for now
         )
+        
+        start_time = time.time()
         for audio in audio_sim:
-            audio_path = "speech.wav"
-            sf.write(audio_path, audio, samplerate= 24000)
-            # with tempfile.NamedTemporaryFile(delete=False, suffix='.wav') as temp_file:
-            #     sf.write(temp_file.name, audio, samplerate= 24000)
-            #     audio_path = temp_file.name
+            # audio_path = "speech.wav"
+            audio_path = None
+            logger.info(f"audio shape {audio.shape}")
+            logger.info(f"infer time {time.time() - start_time}")
+            start_time = time.time()
+            # sf.write(audio_path, audio, samplerate= 24000)
+            with tempfile.NamedTemporaryFile(delete=False, suffix='.wav') as temp_file:
+                torchaudio.save(temp_file.name, audio, samplerate= 24000)
+                audio_path = temp_file.name
             with open(audio_path, "rb") as fwav:
                 # chunk_size = 10 * 24000 * 2 * 2  # 5 sec * 24kHz * 2 channels * 16-bit (2 bytes per sample)
                 data = fwav.read()
