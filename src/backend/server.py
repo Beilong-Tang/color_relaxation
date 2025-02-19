@@ -39,30 +39,29 @@ def generate_sim():
 
     def generate(text):
         logger.info(f"Get Text {text}")
-        print("Synthesizeing audio")
-        audio_sim = tts.synthesize_split(
+        logger.info("Synthesizeing audio")
+        audio = tts.synthesize(
             prompt_wav = "static/prompt_1.wav",
             text=text,
             lang="en" ## Support english for now
         )
         
         start_time = time.time()
-        for audio in audio_sim:
-            # audio_path = "speech.wav"
-            audio_path = None
-            logger.info(f"audio shape {audio.shape}")
-            logger.info(f"infer time {time.time() - start_time}")
-            start_time = time.time()
-            # sf.write(audio_path, audio, samplerate= 24000)
-            with tempfile.NamedTemporaryFile(delete=False, suffix='.wav') as temp_file:
-                torchaudio.save(temp_file.name, audio, 24000)
-                audio_path = temp_file.name
-            with open(audio_path, "rb") as fwav:
-                # chunk_size = 10 * 24000 * 2 * 2  # 5 sec * 24kHz * 2 channels * 16-bit (2 bytes per sample)
-                data = fwav.read()
-                if not data:
-                    break  # End of file
-                yield data
+        # audio_path = "speech.wav"
+        audio_path = None
+        logger.info(f"audio shape {audio.shape}")
+        logger.info(f"infer time {time.time() - start_time}")
+        start_time = time.time()
+        # sf.write(audio_path, audio, samplerate= 24000)
+        with tempfile.NamedTemporaryFile(delete=False, suffix='.wav') as temp_file:
+            torchaudio.save(temp_file.name, audio, 24000)
+            audio_path = temp_file.name
+        with open(audio_path, "rb") as fwav:
+            # chunk_size = 10 * 24000 * 2 * 2  # 5 sec * 24kHz * 2 channels * 16-bit (2 bytes per sample)
+            data = fwav.read()
+            # if not data:
+            #     break  # End of file
+            yield data
     return Response(generate(text), mimetype="audio/wav")  # ✅ Correct MIME type for audio
 
 @app.route("/")
