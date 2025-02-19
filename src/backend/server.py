@@ -19,7 +19,7 @@ tts = FireRedTTS(
     device=DEVICE
 )
 rec_wav = tts.synthesize(
-    prompt_wav="examples/prompt_1.wav",
+    prompt_wav="static/prompt_1.wav",
         text="Hello World",
         lang="en",
 )
