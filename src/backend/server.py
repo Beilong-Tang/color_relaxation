@@ -5,6 +5,7 @@ import tempfile
 import torchaudio
 import soundfile as sf
 import time 
+from flask_cors import CORS
 
 sys.path.append(os.path.dirname(os.getcwd()))
 from utils import setup_logger
@@ -30,6 +31,7 @@ rec_wav = tts.synthesize(
 logger.info("Model intialized perfectly")
 
 app = Flask("Backend Server")
+CORS(app)
 
 # Simulating audio generation
 @app.route('/wav')
@@ -57,6 +59,7 @@ def generate_sim():
             audio_path = temp_file.name
         return audio_path
     audio_path = generate(text)
+    logger.info(f"Get audio path {audio_path}")
     return send_file(audio_path, mimetype='audio/wav')
     # return Response(generate(text), mimetype="audio/wav")  # ✅ Correct MIME type for audio
 
