@@ -29,7 +29,7 @@ app = Flask(__name__)
 
 # Simulating audio generation
 def generate_sim():
-    audio_sim = "static/example_red_color.wav"
+    audio_sim = "/DKUdata/tangbl/tts/FireRedTTS/example_red_color.wav"
     
     # Open the audio file once to stream data
     with open(audio_sim, "rb") as fwav:
