@@ -43,7 +43,7 @@ def generate_sim():
         for audio in audio_sim:
             audio_path = None
             with tempfile.NamedTemporaryFile(delete=False, suffix='.wav') as temp_file:
-                sf.write(temp_file, audio, samplerate= 24000)
+                sf.write(temp_file.name, audio, samplerate= 24000)
                 audio_path = temp_file.name
             with open(audio_path, "rb") as fwav:
                 # chunk_size = 10 * 24000 * 2 * 2  # 5 sec * 24kHz * 2 channels * 16-bit (2 bytes per sample)
@@ -53,13 +53,11 @@ def generate_sim():
                 yield data
     return Response(generate(text), mimetype="audio/wav")  # ✅ Correct MIME type for audio
 
-
-
 @app.route("/")
 def index():
     """Audio streaming homepage."""
     return render_template("index.html")
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", debug=True, threaded=True, port=5000)
+    app.run(host="0.0.0.0", port=5000)
 
