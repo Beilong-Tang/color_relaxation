@@ -1,4 +1,4 @@
-from flask import Flask, Response, render_template, request
+from flask import Flask, Response, jsonify, render_template, request
 import os 
 import sys 
 import tempfile
@@ -31,7 +31,9 @@ app = Flask("Backend Server")
 # Simulating audio generation
 @app.route('/wav')
 def generate_sim():
-    text = request.args.get("text", "")  # ✅ Capture text before the generator starts
+    text = request.args.get("text", "") # ✅ Capture text before the generator starts
+    if text == "":
+        return Response(jsonify({"status": "error"}))
 
     def generate(text):
         logger.info(f"Get Text {text}")
@@ -41,10 +43,11 @@ def generate_sim():
             lang="en" ## Support english for now
         )
         for audio in audio_sim:
-            audio_path = None
-            with tempfile.NamedTemporaryFile(delete=False, suffix='.wav') as temp_file:
-                sf.write(temp_file.name, audio, samplerate= 24000)
-                audio_path = temp_file.name
+            audio_path = "speech.wav"
+            sf.write(audio_path, audio, samplerate= 24000)
+            # with tempfile.NamedTemporaryFile(delete=False, suffix='.wav') as temp_file:
+            #     sf.write(temp_file.name, audio, samplerate= 24000)
+            #     audio_path = temp_file.name
             with open(audio_path, "rb") as fwav:
                 # chunk_size = 10 * 24000 * 2 * 2  # 5 sec * 24kHz * 2 channels * 16-bit (2 bytes per sample)
                 data = fwav.read()
