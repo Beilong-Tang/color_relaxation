@@ -55,7 +55,7 @@ def generate_sim():
             start_time = time.time()
             # sf.write(audio_path, audio, samplerate= 24000)
             with tempfile.NamedTemporaryFile(delete=False, suffix='.wav') as temp_file:
-                torchaudio.save(temp_file.name, audio, samplerate= 24000)
+                torchaudio.save(temp_file.name, audio, 24000)
                 audio_path = temp_file.name
             with open(audio_path, "rb") as fwav:
                 # chunk_size = 10 * 24000 * 2 * 2  # 5 sec * 24kHz * 2 channels * 16-bit (2 bytes per sample)
