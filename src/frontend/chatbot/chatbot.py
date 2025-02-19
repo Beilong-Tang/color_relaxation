@@ -7,7 +7,8 @@ from typing import Union
 
 from pathlib import Path
 import json
-from utils.logger import setup_logger
+
+from utils import setup_logger
 
 logger = setup_logger(__name__)
 import openai

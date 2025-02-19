@@ -22,3 +22,4 @@ def setup_logger(name):
     logger.addHandler(console_handler)
 
     return logger
+
