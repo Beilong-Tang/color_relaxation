@@ -78,7 +78,7 @@ def generate_sim():
         ## Concatenate them in a audio path
         res = []
         for _audio_path in audio_path_list:
-            audio, _ = sf.read(_audio_path, samplerate= 16000)
+            audio, _ = sf.read(_audio_path)
             res.append(audio)
         res = np.concatenate(res, dim = 0)
 
