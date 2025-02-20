@@ -68,7 +68,7 @@ def generate_sim():
             results = list(
                 executor.map(
                     _send_request,
-                    [(sentences[i], node, i) for i, node in enumerate(compute_ports)],
+                    [(sentence_list[i], node, i) for i, node in enumerate(compute_ports)],
                 )
             )
         results = sorted(results, key=lambda x: x['id']) ## Sort them according to id
