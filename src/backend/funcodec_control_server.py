@@ -22,7 +22,7 @@ import argparse
 
 p = argparse.ArgumentParser()
 p.add_argument("--port", type=int, required=True)
-p.add_argument("--compute_ports", type=list, required=True)
+p.add_argument("--compute_ports", nargs="+", required=True)
 args = p.parse_args()
 
 
