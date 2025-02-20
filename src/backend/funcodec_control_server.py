@@ -25,6 +25,8 @@ p.add_argument("--port", type=int, required=True)
 p.add_argument("--compute_ports", nargs="+", required=True)
 args = p.parse_args()
 
+logger.info(f"Backend ports: {args.compute_ports}")
+
 
 # Simulating audio generation
 @app.route("/wav")
@@ -45,7 +47,7 @@ def generate_sim():
         def _send_request(params):
             sentence, node, id = params
 
-            url = f"http://127.0.0.1:{node}/wav/"
+            url = f"http://127.0.0.1:{node}/wav"
             params = {"text": sentence}
             response = requests.get(url, params=params)  # Do the computation
             json_data = response.json()
