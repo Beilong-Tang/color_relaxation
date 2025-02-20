@@ -80,7 +80,7 @@ def generate_sim():
         for _audio_path in audio_path_list:
             audio, _ = sf.read(_audio_path)
             res.append(audio)
-        res = np.concatenate(res, dim = 0)
+        res = np.concatenate(res, axis = 0)
 
         audio_path = None
         with tempfile.NamedTemporaryFile(delete=False, suffix=".wav") as temp_file:
