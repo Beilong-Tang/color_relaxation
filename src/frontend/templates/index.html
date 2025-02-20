@@ -5,108 +5,152 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ChatGPT Color Therapy</title>
     <style>
+        body {
+            font-family: Arial, sans-serif;
+            transition: background-color 1s ease-in-out;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
         #chat-box {
-            width: 80%;
-            height: 300px;
-            overflow-y: scroll;
-            margin: 20px auto;
-            border: 1px solid #ccc;
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.8);
+        }
+        .chat-message {
+            margin: 10px 0;
+        }
+        .chat-message b {
+            display: block;
+        }
+        #input-container {
+            display: flex;
             padding: 10px;
+            background: white;
+            border-top: 1px solid #ccc;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
         }
         #user-input {
-            width: 80%;
-            margin: 10px auto;
+            flex: 1;
             padding: 10px;
+            font-size: 16px;
+        }
+        .button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 16px;
         }
     </style>
 </head>
 <body>
-
-<h1>Color Therapy System</h1>
-
-<div id="chat-box"></div>
-
-<form id="chat-form">
-    <input type="text" id="user-input" placeholder="Ask for a color therapy...">
-    <button type="submit" id="submit-btn">Ask</button>
-</form>
-
-<script>
-    const chatForm = document.getElementById('chat-form');
-    const chatBox = document.getElementById('chat-box');
-    const userInput = document.getElementById('user-input');
-    const submitButton = document.getElementById('submit-btn');  // Button reference
-
-    chatForm.addEventListener('submit', async function (e) {
-        e.preventDefault();
-
-        // Disable the button to prevent multiple submissions
-        submitButton.disabled = true;
-
-        const prompt = userInput.value;
-
-        userInput.value = '';  // Clear input field
-        chatBox.innerHTML += `<b>You:</b> ${prompt}<br>`;
-    
-        try {
-            const response = await fetch('/talk', {
-                method: 'POST',
-                body: new URLSearchParams({ 'prompt': prompt }),
-                headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
-            });
-
-            const data = await response.json();
-            console.log(data);
-            if (data.response) {
-                chatBox.innerHTML += `<b>ChatGPT:</b> ${data.response}<br>`;
-                // Insert the play button for the audio after the response
-                insertAudioPlayer(data.response);
+    <div><h1>DKU Color Therapy</h1></div>
+    <div id="chat-box"></div>
+    <div id="input-container">
+        <input type="text" id="user-input" placeholder="Ask for a color therapy...">
+        <button class="button" onclick="generateResponse()">Ask</button>
+    </div>
+    <script>
+        function getRandomColor(color) {
+            console.log("Random Color get color: ", color);
+            
+            // Define a dictionary of specific colors
+            const colorDict = {
+                'red': '#FF0000',
+                'green': '#00FF00',
+                'blue': '#0000FF',
+                'yellow': '#FFFF00',
+                'orange': '#FFA500',
+                'purple': '#800080',
+                'pink': '#FFC0CB',
+                'brown': '#A52A2A',
+                'cyan': '#00FFFF',
+                'magenta': '#FF00FF'
+            };
+            
+            // Convert the input color to lowercase
+            const colorLowerCase = color.toLowerCase();
+            
+            // Check if the color is in the dictionary
+            if (colorDict[colorLowerCase]) {
+                return colorDict[colorLowerCase];
             } else {
-                chatBox.innerHTML += `<b>Error:</b> ${data.error}<br>`;
+                // If not found, return a random pink color
+                const pinkShades = ['#FF69B4', '#FF1493', '#FFB6C1', '#FFC0CB'];
+                const randomPink = pinkShades[Math.floor(Math.random() * pinkShades.length)];
+                return randomPink;
             }
-
-            chatBox.scrollTop = chatBox.scrollHeight;  // Auto-scroll
-        } catch (error) {
-            chatBox.innerHTML += `<b>Error:</b> Unable to fetch response from the server.<br>`;
-            console.error('Error:', error);
-        } finally {
-            // Re-enable the button after the request finishes (success or error)
-            submitButton.disabled = false;
-        }
-    });
-
-async function insertAudioPlayer(responseText) {
-    const uniqueId = crypto.randomUUID();  // Generate unique ID
-
-    try {
-        const response = await fetch(`http://10.200.14.51:5000/wav?text=${encodeURIComponent(responseText)}`);
-        if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
         }
 
-        // Convert response to Blob
-        const audioBlob = await response.blob();
-        const audioUrl = URL.createObjectURL(audioBlob);  // Create a URL for Blob
+        async function generateResponse() {
+            const chatBox = document.getElementById("chat-box");
+            const userInput = document.getElementById("user-input");
+            const prompt = userInput.value || "Give me a color therapy";
+            chatBox.innerHTML += `<div class='chat-message'><b>You:</b> ${prompt}</div>`;
+            userInput.value = "";
+            
+            try {
+                const response = await fetch('/talk', {
+                    method: 'POST',
+                    body: new URLSearchParams({'prompt': prompt}),
+                    headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                
+                const data = await response.json();
+                if (data.response) {
+                    // const newColor = getRandomColor('abc');
+                    const newColor = getRandomColor(data.color);
+                    document.body.style.backgroundColor = newColor;
+    chatBox.innerHTML += `<div class='chat-message'><b>ChatGPT:</b>${data.response}</div>`;
+                    insertAudioPlayer(data.response);
+                } else {
+                    chatBox.innerHTML += `<div class='chat-message'><b>Error:</b> ${data.error}</div>`;
+                }
+                chatBox.scrollTop = chatBox.scrollHeight;
+            } catch (error) {
+                console.error("Error fetching response:", error);
+                chatBox.innerHTML += `<div class='chat-message'><b>Error:</b> Unable to fetch response.</div>`;
+            }
+        }
 
-        // Create a new audio element
-        const audioElement = document.createElement("audio");
-        audioElement.controls = true;
-        audioElement.src = audioUrl;
+        async function insertAudioPlayer(responseText) {
+            const chatBox = document.getElementById("chat-box");
+            const uniqueId = crypto.randomUUID();
+            const backendServer = {{backend_path|tojson}};
+            console.log("backend server: ", backendServer);
 
-        // Append the audio element to the chat box
-        const audioWrapper = document.createElement("div");
-        audioWrapper.innerHTML = `<b>Audio ${uniqueId}:</b>`;
-        audioWrapper.appendChild(audioElement);
-        chatBox.appendChild(audioWrapper);
+            try {
+                const response = await fetch(`${backendServer}/wav?text=${encodeURIComponent(responseText)}`);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
 
-        // Play audio automatically
-        audioElement.play();
-    } catch (error) {
-        console.error("Error fetching audio:", error);
-        chatBox.innerHTML += `<b>Error:</b> Failed to load audio.<br>`;
-    }
-}
-</script>
+                const audioBlob = await response.blob();
+                const audioUrl = URL.createObjectURL(audioBlob);
+
+                const audioElement = document.createElement("audio");
+                audioElement.controls = true;
+                audioElement.src = audioUrl;
+
+                const audioWrapper = document.createElement("div");
+                audioWrapper.innerHTML = `<b>Audio output:</b>`;
+                audioWrapper.appendChild(audioElement);
+                chatBox.appendChild(audioWrapper);
+            } catch (error) {
+                console.error("Error fetching audio:", error);
+                chatBox.innerHTML += `<div class='chat-message'><b>Error:</b> Failed to load audio.</div>`;
+            }
+        }
+    </script>
 </body>
 </html>
-

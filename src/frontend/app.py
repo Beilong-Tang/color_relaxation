@@ -6,6 +6,9 @@ os.environ['HTTPS_PROXY'] = "http://proxy-dku.oit.duke.edu:3128"
 
 from flask import Flask, render_template, jsonify, request, send_file
 
+BACKEND_PATH= "http://127.0.0.1:8000"
+# BACKEND_PATH= "http://10.200.14.51:5000"
+TEST_AUDIO = True
 
 
 ## Get the get_color and content
@@ -18,8 +21,7 @@ logger = setup_logger(__name__)
 @app.route("/")
 def main():
     logger.info("Started application. Logging works fine")
-    return render_template("index.html")
-
+    return render_template("index.html", backend_path = BACKEND_PATH)
 
 
 @app.route("/talk", methods=['POST'])
@@ -29,18 +31,13 @@ def talk():
     color, message = get_color_and_content(user_prompt)
 
     logger.info(f"Detected color {color}")
-    return jsonify({"response": message})
+    return jsonify({"response": message, "color": color})
 
+@app.route("/wav")
+def generate_audio():
+    if TEST_AUDIO is True:
+        return send_file('static/example_red_color.wav', mimetype='audio/wav')
 
-# @app.route('/generate_speech')
-# def gen_speech():
-#     text = request.args.get('text', '')
-#
-#     logger.info(f"Gen Speech get text: {text[:100]}...")
-#     
-#     fake_audio_path = r"static\fileid_1.flac"
-#
-#     return send_file(fake_audio_path, mimetype='audio/mpeg')
 
 if __name__ == "__main__":
     app.run(debug=True, port=8000)

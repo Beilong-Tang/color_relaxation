@@ -18,7 +18,7 @@ with open(f"{Path(__file__).parent.parent / 'conf' / 'config.json'}", "r") as fi
 
 CHAT_GPT_CLIENT = openai.OpenAI(api_key=api_key)
 
-TEST = True # If this is True, in debug mode, chatGPT request will not be triggered -> to save API money :)
+TEST = True# If this is True, in debug mode, chatGPT request will not be triggered -> to save API money :)
 
 
 def get_color_and_content(user_prompt: str) -> Union[str, str]:
@@ -32,7 +32,7 @@ def get_color_and_content(user_prompt: str) -> Union[str, str]:
             messages=[
                 {
                     "role": "developer",
-                    "content": "You are a color therapy doctor. Based on the user input, please identify a color for him/her. And also a color therapy texts for a 30 to 60 seconds. The output format should be 'color. ....' For example: Blue. Blue is a calming color ....",
+                    "content": "You are a color therapy doctor. Based on the user input, please identify a color for him/her. And also a color therapy texts for a 20 to 30 seconds. The output format should be 'color. ....' For example: Blue. Blue is a calming color ....",
                 },
                 {"role": "user", "content": f"{user_prompt}"},
             ],
