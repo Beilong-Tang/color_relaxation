@@ -2,18 +2,21 @@ from flask import Flask, Response, jsonify, render_template, request, send_file
 import os 
 import sys 
 import tempfile
-import torchaudio
 import time 
 from flask_cors import CORS
 
 sys.path.append(os.path.dirname(os.getcwd()))
 from utils import setup_logger
 logger = setup_logger(__name__)
+import argparse
 
-DEVICE="cuda"
-os.environ['CUDA_VISIBLE_DEVICES'] = '5'
+p = argparse.ArgumentParser()
+p.add_argument("--port", type=int, required=True)
+p.add_argument("--device", type=str, required=True)
+args = p.parse_args()
+os.environ['CUDA_VISIBLE_DEVICES'] = args.device
 
-logger.info("Inializeing Funcodec Model")
+logger.info(f"[Port {args.port}] is intializing Funcodec Model")
 
 from model.funcodec import Text2AudioWrapper
 import json
@@ -21,7 +24,7 @@ with open("/DKUdata/tangbl/FunCodec/FunCodec/egs/LibriTTS/text2speech_laura/infe
     kwargs = json.load(file)
 text2audio = Text2AudioWrapper(**kwargs)
 
-app = Flask("LauraGPT Model")
+app = Flask("LauraGPT Compute Node")
 CORS(app)
 
 # Simulating audio generation
@@ -43,16 +46,12 @@ def generate_sim():
         start_time = time.time()
         return audio_path
     audio_path = generate(text)
-    logger.info(f"Get audio path {audio_path}")
-    return send_file(audio_path, mimetype='audio/wav')
+    logger.info(f"[NODE 5]Get audio path {audio_path}")
+    # return send_file(audio_path, mimetype='audio/wav')
+    return jsonify({"audio_path": audio_path})
     # return Response(generate(text), mimetype="audio/wav")  # ✅ Correct MIME type for audio
 
-@app.route("/")
-def index():
-    """Audio streaming homepage."""
-    return render_template("index.html")
-
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5001)
+    app.run(port=args.port)
 
 

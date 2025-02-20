@@ -40,6 +40,8 @@ def get_color_and_content(user_prompt: str) -> Union[str, str]:
         res = response.choices[0].message.content
     else:
         res = "Red. Red is a powerful color often associated with strong emotions, including anger and passion. While it can energize and inspire, too much red can exacerbate intense feelings. To balance this energy, it's beneficial to engage with calming colors, particularly shades of blue or green. Visualizing these calming hues can help diffuse your anger, promoting serenity and relaxation. Take deep breaths, imagine a peaceful blue sky or a tranquil green meadow, and let those feelings wash over you, helping to restore your inner peace."
-
-    color = res.split(".")[0]
+    
+    color_idx = res.index(".")
+    color = res[:color_idx]
+    res = res[color_idx+1:]
     return color, res

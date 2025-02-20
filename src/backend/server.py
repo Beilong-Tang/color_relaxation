@@ -7,6 +7,10 @@ import soundfile as sf
 import time 
 from flask_cors import CORS
 
+"""
+RedTTS Server
+"""
+
 sys.path.append(os.path.dirname(os.getcwd()))
 from utils import setup_logger
 logger = setup_logger(__name__)
