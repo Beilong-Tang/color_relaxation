@@ -6,9 +6,11 @@ os.environ['HTTPS_PROXY'] = "http://proxy-dku.oit.duke.edu:3128"
 
 from flask import Flask, render_template, jsonify, request, send_file
 
-BACKEND_PATH= "http://127.0.0.1:8000"
-# BACKEND_PATH= "http://10.200.14.51:5000"
-TEST_AUDIO = True
+
+### Global Config for now ###
+# BACKEND_PATH= "http://127.0.0.1:8000"
+BACKEND_PATH= "http://10.200.14.51:5000"
+TEST_AUDIO = False
 
 
 ## Get the get_color and content
