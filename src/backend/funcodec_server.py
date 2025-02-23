@@ -54,7 +54,7 @@ def generate_sim():
         start_time = time.time()
         return audio_path
     audio_path = generate(text)
-    logger.info(f"[NODE 5]Get audio path {audio_path}")
+    logger.info(f"[NODE {args.port}]Get audio path {audio_path}")
     # return send_file(audio_path, mimetype='audio/wav')
     return jsonify({"audio_path": audio_path})
     # return Response(generate(text), mimetype="audio/wav")  # ✅ Correct MIME type for audio
