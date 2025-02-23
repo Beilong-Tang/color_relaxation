@@ -44,7 +44,6 @@ def upload_prompt():
         if "status" in res:
             return {"status": "success"}
         return {"failure": "failure"}
-        
 
     if 'file' not in request.files:
         return jsonify({'message': 'No file part', 'success': False}), 400
@@ -140,14 +139,6 @@ def generate_sim():
     audio_path = generate(text)
     logger.info(f"Get audio path {audio_path}")
     return send_file(audio_path, mimetype="audio/wav")
-    # return Response(generate(text), mimetype="audio/wav")  # ✅ Correct MIME type for audio
-
-
-@app.route("/")
-def index():
-    """Audio streaming homepage."""
-    return render_template("index.html")
-
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=args.port)

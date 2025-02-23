@@ -51,10 +51,11 @@
 </head>
 <body>
     <div><h1>DKU Color Sound Text Relaxation System</h1></div>
-    <form  enctype="multipart/form-data">
+    <form enctype="multipart/form-data">
         <input type="file" name="file" accept=".wav" required>
         <input type="text" name="text" required>
         <button type="submit">Upload</button>
+        <p id = "upload-message"></p>
     </form>
     <div id="chat-box"></div>
     <div id="input-container">
@@ -73,15 +74,13 @@
                 body: formData
             });
 
+          
+
             let result = await response.json();
             let messageElement = document.getElementById("upload-message");
-            
-            if (!messageElement) {
-                messageElement = document.createElement("p");
-                messageElement.id = "upload-message";
-                document.body.appendChild(messageElement);
-            }
+            let currentTime = new Date().toLocaleString(); // Get current time as a string
 
+            messageElement.textContent = `${result.message} (Uploaded at: ${currentTime})`;
             messageElement.textContent = result.message;
             messageElement.style.color = result.success ? "green" : "red";
         });
