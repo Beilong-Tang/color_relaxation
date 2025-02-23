@@ -27,6 +27,14 @@ text2audio = Text2AudioWrapper(**kwargs)
 app = Flask("LauraGPT Compute Node")
 CORS(app)
 
+@app.route("/generate_prompt")
+def generate_prompt():
+    text = request.args.get("text")
+    prompt_path = request.args.get("prompt")
+    text2audio.change_prompt_audio_and_text(prompt_path, text)
+    return jsonify({"status": "success"})
+
+
 # Simulating audio generation
 @app.route('/wav')
 def generate_sim():

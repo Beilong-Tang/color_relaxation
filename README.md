@@ -18,4 +18,6 @@ For SOSC110 Innovation final project
 - [ ] Play Background audio when a user types a color
     - [ ] Rachel or Yixin Finds the background music for each color
 - [ ] __DISCUSSION__ Should I make the audio play in the background without adding to the element?
+- [ ] Beautiful UI 
+    - [ ] Change name
 

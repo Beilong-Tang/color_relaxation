@@ -18,7 +18,7 @@ with open(f"{Path(__file__).parent.parent / 'conf' / 'config.json'}", "r") as fi
 
 CHAT_GPT_CLIENT = openai.OpenAI(api_key=api_key)
 
-TEST =  False# If this is True, in debug mode, chatGPT request will not be triggered -> to save API money :)
+TEST = True# If this is True, in debug mode, chatGPT request will not be triggered -> to save API money :)
 
 
 def get_color_and_content(user_prompt: str) -> Union[str, str]:

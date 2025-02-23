@@ -7,6 +7,7 @@ from flask_cors import CORS
 import nltk
 import numpy as np
 from concurrent.futures import ThreadPoolExecutor
+import tempfile
 import soundfile as sf 
 import requests
 
@@ -26,6 +27,51 @@ p.add_argument("--compute_ports", nargs="+", required=True)
 args = p.parse_args()
 
 logger.info(f"Backend ports: {args.compute_ports}")
+
+@app.route('/prompt_upload', methods=['POST'])
+def upload_prompt():
+
+    def _send_request(params):
+        """
+        This function informs other nodes to update the prompt audio 
+        """
+        file_path, text, node = params
+        
+        url = f"http://127.0.0.1:{node}/generate_prompt"
+        _params = {"text": text, "prompt": file_path}
+        res = requests.get(url, params = _params)
+        res = res.json()
+        if "status" in res:
+            return jsonify({"status": "success"})
+        return jsonify({"failure": "failure"})
+        
+
+    if 'file' not in request.files:
+        return jsonify({'message': 'No file part', 'success': False}), 400
+    file = request.files['file']
+    text = request.form.get("text")
+    if text is None:
+        return jsonify({'message': 'No text found', 'success': False}), 400
+    if file.filename == '':
+        return jsonify({'message': 'No selected file', 'success': False}), 400
+    if file and file.filename.endswith('.wav'):
+        with tempfile.NamedTemporaryFile(delete=False, suffix=".wav") as temp_file:
+            path = temp_file.name
+        file.save(path)
+        compute_ports = args.compute_ports
+        ## Notify the compute nodes to update speaker prompt
+        with ThreadPoolExecutor(max_workers=len(compute_ports)) as executor:
+            results = list(
+                executor.map(
+                    _send_request,
+                    [(path, text, node) for node in compute_ports],
+                )
+            )
+        for _r in results:
+            if "failure" in _r:
+                return jsonify({'message': 'Compute nodes failed', 'success': False}), 400
+        return jsonify({'message': 'success', 'success': True}), 200
+    return jsonify({'message': 'Invalid file type', 'success': False}), 400
 
 
 # Simulating audio generation
