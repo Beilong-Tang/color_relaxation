@@ -51,7 +51,7 @@
 </head>
 <body>
     <div><h1>DKU Color Sound Text Relaxation System</h1></div>
-    <form action="/prompt_upload" method="post" enctype="multipart/form-data">
+    <form  enctype="multipart/form-data">
         <input type="file" name="file" accept=".wav" required>
         <input type="text" name="text" required>
         <button type="submit">Upload</button>
@@ -62,13 +62,13 @@
         <button class="button" onclick="generateResponse()">Ask</button>
     </div>
     <script>
-        const backendServer = {{backend_path|tojson}};
         // Update the form to submit prompt audio to server
         document.querySelector("form").addEventListener("submit", async function(event) {
             event.preventDefault();
             let formData = new FormData(this);
+            const backendServer = {{backend_path|tojson}};
 
-            let response = await fetch(`${backendServer}/prompt_upload` {
+            let response = await fetch(`${backendServer}/prompt_upload`, {
                 method: "POST",
                 body: formData
             });

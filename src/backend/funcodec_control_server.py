@@ -42,8 +42,8 @@ def upload_prompt():
         res = requests.get(url, params = _params)
         res = res.json()
         if "status" in res:
-            return jsonify({"status": "success"})
-        return jsonify({"failure": "failure"})
+            return {"status": "success"}
+        return {"failure": "failure"}
         
 
     if 'file' not in request.files:
