@@ -31,6 +31,7 @@ CORS(app)
 def generate_prompt():
     text = request.args.get("text")
     prompt_path = request.args.get("prompt")
+    logger.info(f"[NODE {args.port}] Get text {text} and prompt path {prompt_path}")
     text2audio.change_prompt_audio_and_text(prompt_path, text)
     return jsonify({"status": "success"})
 
