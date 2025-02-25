@@ -27,6 +27,9 @@ def main():
     logger.info("Started application. Logging works fine")
     return render_template("index.html", backend_path = BACKEND_PATH)
 
+@app.route("/introduction")
+def introduction():
+    return render_template("introduction.html")
 
 @app.route("/talk", methods=['POST'])
 def talk():

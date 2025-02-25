@@ -132,6 +132,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     async function generateResponse() {
+        document.getElementById("generate-response-btn").disabled = true; 
         const chatBox = document.getElementById("chat-box");
         const userInput = document.getElementById("user-input");
         const prompt = userInput.value || "Give me a color therapy";
@@ -168,6 +169,7 @@ document.addEventListener("DOMContentLoaded", function () {
             console.error("Error fetching response:", error);
             chatBox.innerHTML += `<div class='chat-message'><b>Error:</b> Unable to fetch response.</div>`;
         }
+        document.getElementById("generate-response-btn").disabled = false;
     }
 
     async function insertAudioPlayer(responseText, color) {
