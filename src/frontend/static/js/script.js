@@ -71,7 +71,26 @@ document.addEventListener("click", function(event) {
     }
 });
 
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
 
+async function typeText(element, text) {
+    const words = text.split(' '); // Split the text into words
+    let index = 0;
+    
+    // Use a while loop to iterate through the words
+    while (index < words.length) {
+        // Append one word at a time to the element
+        element.innerHTML += words[index] + ' ';
+        
+        // Wait for 500ms before adding the next word (adjust speed as needed)
+        await sleep(100);
+        
+        // Move to the next word
+        index++;
+    }
+}
 
 document.addEventListener("DOMContentLoaded", function () {
     // Update the form to submit prompt audio to server
@@ -138,7 +157,12 @@ document.addEventListener("DOMContentLoaded", function () {
             if (data.response) {
                 const newColor = getRandomColor(data.color);
                 document.body.style.backgroundColor = newColor;
-                chatBox.innerHTML += `<div class='chat-message'><b>ChatGPT:</b> ${data.response}</div>`;
+                chatBox.innerHTML += `<div class='chat-message'><b>Agent:</b></div>`;
+                element = chatBox.lastElementChild;
+                console.log(element)
+                // Add text to it
+                console.log(data.response)
+                await typeText(element,data.response)
                 insertAudioPlayer(data.response, newColor);
             } else {
                 chatBox.innerHTML += `<div class='chat-message'><b>Error:</b> ${data.error}</div>`;
