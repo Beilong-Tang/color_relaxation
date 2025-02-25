@@ -1,77 +1,54 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ChatGPT Color Therapy</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            transition: background-color 1s ease-in-out;
-            margin: 0;
-            display: flex;
-            flex-direction: column;
-            height: 100vh;
-        }
-        #chat-box {
-            flex: 1;
-            overflow-y: auto;
-            padding: 20px;
-            background: rgba(255, 255, 255, 0.8);
-        }
-        .chat-message {
-            margin: 10px 0;
-        }
-        .chat-message b {
-            display: block;
-        }
-        #input-container {
-            display: flex;
-            padding: 10px;
-            background: white;
-            border-top: 1px solid #ccc;
-            position: fixed;
-            bottom: 0;
-            width: 100%;
-        }
-        #user-input {
-            flex: 1;
-            padding: 10px;
-            font-size: 16px;
-        }
-        .button {
-            background-color: #007bff;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            cursor: pointer;
-            font-size: 16px;
-        }
-    </style>
-    <script defer src="{{ url_for('static', filename='js/script.js') }}"></script>
-</head>
-<body>
-    <div><h1>DKU Color Sound Text Relaxation System</h1></div>
-    <audio autoplay controls>
-      <source src="{{ url_for('static', filename='background.wav') }}" type="audio/mpeg">
-      Your browser does not support the audio element.
-    </audio>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>DKU Color Sound Text Relaxation System</title>
+        <link rel="stylesheet"
+            href="{{ url_for('static', filename='css/style.css') }}">
+        <script defer
+            src="{{ url_for('static', filename='js/script.js') }}"></script>
+    </head>
+    <body>
 
-    <form enctype="multipart/form-data">
-        <input type="file" name="file" accept=".wav" required>
-        <input type="text" name="text" required>
-        <button type="submit">Upload</button>
-        <p id = "upload-message"></p>
-    </form>
-    <div id="chat-box"></div>
-    <div id="input-container">
-        <input type="text" id="user-input" placeholder="Ask for a color therapy...">
-        <button id='generate-response-btn' class="button" onclick="generateResponse()">Ask</button>
-    </div>
+        <div id="top-bar">DKU Color Sound Text Relaxation System
+            <button class="button" onclick="openCustomize()">Customize</button>
+        </div>
 
-  
-    <script id="backend-path" type="application/json">
+        <!-- 🔹 Customize top bar 🔹 -->
+        <div id="overlay-customize"></div>
+        <div id="modal-customize">
+            <button class="close-btn" onclick="closeCustomize()">X</button>
+            <h2>Upload your prompt speaker</h2>
+            <form id="upload-form" enctype="multipart/form-data">
+                <label for="file-upload">Your speaker:</label>
+                <input type="file" id="file-upload" name="file" accept=".wav"
+                    required>
+                <input type="text" name="text" required
+                    placeholder="Enter text that the speaker says">
+                <button type="submit">Upload</button>
+                <p id="upload-message"></p>
+            </form>
+            <h2>Change background Music </h2>
+            <audio autoplay controls id='background-music'>
+                <source src="{{ url_for('static', filename='background.wav') }}"
+                    type="audio/mpeg">
+                Your browser does not support the audio element.
+            </audio>
+        </div>
+
+        <div id="chat-box"></div>
+
+        <div id="input-container">
+            <input type="text" id="user-input"
+                placeholder="Ask for a color therapy...">
+            <button id="generate-response-btn" class="button"
+                onclick="generateResponse()">Ask</button>
+        </div>
+
+        <script id="backend-path" type="application/json">
         {{ backend_path|tojson }}
     </script>
-  </body>
+
+    </body>
 </html>

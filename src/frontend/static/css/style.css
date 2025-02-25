@@ -1,0 +1,235 @@
+        /* General styling */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        /* Smooth background gradient animation */
+        body {
+            transition: background-color 2s ease-in-out;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            animation: gradientAnimation 10s infinite alternate ease-in-out;
+        }
+
+        @keyframes gradientAnimation {
+            0% { background-color: #ff9a9e; } 
+            50% { background-color: #fad0c4; }  
+            100% { background-color: #a18cd1; }  
+        }
+
+        /* Top bar styling */
+        #top-bar {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.2);
+            padding: 15px;
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+            color: white;
+            backdrop-filter: blur(10px);
+            position: fixed;
+            top: 0;
+            left: 0;
+        }
+
+        /* Chat box styling */
+        #chat-box {
+            flex: 1;
+            width: 90%;
+            max-width: 10000px;
+            margin-top: 80px;
+            padding: 20px;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.6);
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+            overflow-y: auto;
+            max-height: 60vh;
+            margin-bottom: 80px; /* Adjust according to input height */
+        }
+
+        /* Input section */
+        #input-container {
+            display: flex;
+            width: 90%;
+            max-width: 600px;
+            padding: 10px;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.8);
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            bottom: 20px;
+        }
+
+        #user-input {
+            flex: 1;
+            padding: 10px;
+            font-size: 16px;
+            border: none;
+            outline: none;
+            border-radius: 8px;
+        }
+
+        .button {
+            background-color: #6a11cb;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 16px;
+            border-radius: 8px;
+            margin-left: 10px;
+            transition: background 0.3s ease-in-out;
+        }
+
+        .button:hover {
+            background-color: #2575fc;
+        }
+
+        /* 🔹 MODAL (Pop-out window) STYLING 🔹 */
+        #modal-customize {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80%;
+            max-width: 400px;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+        }
+
+        /* Background overlay when modal opens */
+        #overlay-customize {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.4);
+            z-index: 999;
+        }
+
+        /* Close button */
+        .close-btn {
+            background-color: #ff758c;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+            font-size: 14px;
+            border-radius: 5px;
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
+
+        .close-btn:hover {
+            background-color: #ff7eb3;
+        }
+
+        /* Style for upload form inside the modal */
+        #upload-form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 15px;
+        }
+
+        #upload-form input, #upload-form button {
+            margin: 5px;
+            padding: 10px;
+            font-size: 16px;
+            border: none;
+            border-radius: 8px;
+            width: 90%;
+        }
+
+        #upload-form button {
+            background-color: #ff758c;
+            color: white;
+            cursor: pointer;
+            transition: background 0.3s ease-in-out;
+        }
+
+        #upload-form button:hover {
+            background-color: #ff7eb3;
+        }
+
+        /* Audio Player */
+        audio {
+            margin-top: 15px;
+        }
+
+
+
+        /* Modal Background */
+        .section-modal {
+            display: none; /* Hidden by default */
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: red; /* Pure solid red background */
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Modal Content */
+        .section-modal-content {
+            /* background: white; */
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            width: 80%;
+            text-align: center; 
+            font-size: 20px;
+            position: fixed;
+            bottom: 0;
+        }
+
+        /* Close Button */
+        .close {
+            cursor: pointer;
+            font-size: 20px;
+            font-weight: bold;
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            color: white;
+        }
+
+        /* Button */
+        .section-open-modal {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            background: purple;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            margin: 10px;
+        }
+
+        .section-hide-text {
+            position: fixed;
+            top: 20px; /* Adjust this value for vertical positioning */
+            right: 30px; /* Adjust this value for horizontal positioning */
+            margin: 0;
+            font-size: 14px; /* Optional: adjust the font size */
+            color: white; /* Optional: set the text color */
+            z-index: 9999; /* Ensure it stays on top of other elements */
+          }

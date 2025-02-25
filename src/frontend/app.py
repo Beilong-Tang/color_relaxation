@@ -8,10 +8,10 @@ from flask import Flask, render_template, jsonify, request, send_file
 
 
 ### Global Config for now ###
-# BACKEND_PATH= "http://127.0.0.1:8000"
+BACKEND_PATH= "http://127.0.0.1:8000"
 # BACKEND_PATH= "http://10.200.14.51:5000" ## RedTTS
-BACKEND_PATH= "http://10.200.14.51:5009" ## Funcodec LauraGPT
-TEST_AUDIO = False
+# BACKEND_PATH= "http://10.200.14.51:5009" ## Funcodec LauraGPT
+TEST_AUDIO = True
 
 
 ## Get the get_color and content
@@ -20,6 +20,7 @@ from chatbot.chatbot import *
 app = Flask(__name__)
 from utils import setup_logger
 logger = setup_logger(__name__)
+
 
 @app.route("/")
 def main():

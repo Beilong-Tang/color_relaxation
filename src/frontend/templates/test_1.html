@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Multiple Modals</title>
+        <style>
+        /* Modal Background */
+        .section-modal {
+            display: none; /* Hidden by default */
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: red; /* Pure solid red background */
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Modal Content */
+        .section-modal-content {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            width: 300px;
+            text-align: center; 
+        }
+
+        /* Close Button */
+        .close {
+            cursor: pointer;
+            font-size: 20px;
+            font-weight: bold;
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            color: white;
+        }
+
+        /* Button */
+        .section-open-modal {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            background: purple;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            margin: 10px;
+        }
+    </style>
+    </head>
+    <body>
+
+        <!-- Section 1 -->
+        <div class="section">
+            <button class="section-open-modal">Open Modal 1</button>
+            <div class="section-modal">
+                <div class="section-modal-content">
+                    <p>This is Modal 1</p>
+                    <span class="close section-close-modal"
+                        onclick="closeModal()">&times;</span>
+                    <audio autoplay controls class='prompt-audio'>
+                        <source
+                            src="../static/example_red_color.wav"
+                            type="audio/mpeg">
+                        Your browser does not support the audio element.
+                    </audio>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 2 -->
+        <div class="section">
+            <button class="section-open-modal">Open Modal 2</button>
+            <div class="section-modal">
+                <div class="section-modal-content">
+                    <p>This is Modal 2</p>
+                    <span class="close section-close-modal"
+                        onclick="closeModal()">&times;</span>
+                    <audio autoplay controls class='prompt-audio'>
+                        <source
+                            src="../static/example_red_color.wav"
+                            type="audio/mpeg">
+                        Your browser does not support the audio element.
+                    </audio>
+                </div>
+            </div>
+        </div>
+
+        <!-- JavaScript -->
+        <script>
+        document.addEventListener("click", function(event) {
+            // Open the closest modal when clicking a button
+            if (event.target.classList.contains("section-open-modal")) {
+                let modal = event.target.closest(".section").querySelector(".section-modal");
+                if (modal) modal.style.display = "flex";
+                // play the audio
+                let audio = event.target.closest(".section").querySelector(".prompt-audio");
+                audio.play();
+            }
+
+            // Close the modal when clicking the close button
+            if (event.target.classList.contains("section-close-modal")) {
+                let modal = event.target.closest(".section-modal");
+                if (modal) modal.style.display = "none";
+                let audio = event.target.closest(".section").querySelector(".prompt-audio")
+                audio.pause();
+                audio.currentTime = 0;
+            }
+        });
+    </script>
+
+    </body>
+</html>
