@@ -46,6 +46,9 @@ function closeModal(event) {
       const modalContent = modal.querySelector(".section-modal");
       if (modalContent) {
         modalContent.style.display = "none";
+        let audio = modal.querySelector(".prompt-audio")
+        audio.pause();
+        audio.currentTime = 0;
       }
     }
   }
@@ -61,14 +64,6 @@ document.addEventListener("click", function(event) {
         audio.play();
     }
 
-    // Close the modal when clicking the close button
-    if (event.target.classList.contains("section-close-modal")) {
-        let modal = event.target.closest(".section-modal");
-        if (modal) modal.style.display = "none";
-        let audio = event.target.closest(".section").querySelector(".prompt-audio")
-        audio.pause();
-        audio.currentTime = 0;
-    }
 });
 
 function sleep(ms) {
@@ -89,6 +84,7 @@ async function typeText(element, text) {
         
         // Move to the next word
         index++;
+        element.scrollIntoView({ behavior: "smooth", block: "end" });
     }
 }
 
@@ -162,8 +158,8 @@ document.addEventListener("DOMContentLoaded", function () {
                 console.log(element)
                 // Add text to it
                 console.log(data.response)
-                await typeText(element,data.response)
-                insertAudioPlayer(data.response, newColor);
+                typeText(element,data.response)
+                insertAudioPlayer(data.response, data.color);
             } else {
                 chatBox.innerHTML += `<div class='chat-message'><b>Error:</b> ${data.error}</div>`;
             }
@@ -199,18 +195,40 @@ document.addEventListener("DOMContentLoaded", function () {
             // chatBox.appendChild(audioWrapper);
             
             // Also try to add the modal to it
+            console.log(color.toLowerCase())
+            color = color.toLowerCase()
+            let cur_col = ""
+            if (color.includes("red")){
+                cur_col="red"
+            }
+            else if  (color.includes("green")){
+                cur_col="green"
+            }
+            else if  (color.includes("yellow")){
+                cur_col="yellow"
+            }
+            else if  (color.includes("purple")){
+                cur_col="purple"
+            }
+            else if  (color.includes("orange")){
+                cur_col="orange"
+            }
+            else if  (color.includes("blue")){
+                cur_col="blue"
+            }
+            console.log("Current color", cur_col)
 
             const newHTML = `
                 <div class="section">
                     <button class="section-open-modal">RELAX</button>
-                    <div class="section-modal" style='background-color: ${color}'>
+                    <div class="section-modal back-${cur_col}">
                     <div class="close section-close-modal">
                         <span style='margin-right:30px' onclick="closeContent(event)" class='section-hide'>HIDE</span>
                         <span onclick="closeModal(event)">X</span>
                     </div>
                         <div class="section-modal-content">
                             <p>${responseText}</p>
-                            <audio autoplay controls class="prompt-audio">
+                            <audio controls class="prompt-audio">
                                 <source src="${audioUrl}" type="audio/mpeg">
                                 Your browser does not support the audio element.
                             </audio>

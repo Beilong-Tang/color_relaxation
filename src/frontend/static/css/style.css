@@ -182,7 +182,7 @@
             top: 0;
             width: 100%;
             height: 100%;
-            background-color: red; /* Pure solid red background */
+            background-color: green; 
             display: none;
             align-items: center;
             justify-content: center;
@@ -232,4 +232,60 @@
             font-size: 14px; /* Optional: adjust the font size */
             color: white; /* Optional: set the text color */
             z-index: 9999; /* Ensure it stays on top of other elements */
+          }
+
+          .back-red{
+            animation: back-red 10s infinite alternate ease-in-out;
+          }
+          .back-orange{
+            animation: back-orange 10s infinite alternate ease-in-out;
+          }
+          .back-yellow{
+            animation: back-yellow 10s infinite alternate ease-in-out;
+          }
+          .back-green{
+            animation: back-green 10s infinite alternate ease-in-out;
+          }
+          .back-blue{
+            animation: back-blue 10s infinite alternate ease-in-out;
+          }
+          .back-purple{
+            animation: back-purple 10s infinite alternate ease-in-out;
+          }
+
+          @keyframes back-red{
+            /* Red Shades */
+            0% { background-color: #fc7575; }  /* Light Red */
+            
+            100% { background-color: #ff2d2d; } /* Dark Red */
+          }
+
+          @keyframes back-orange{
+            /* Red Shades */
+            0% { background-color: #ffb3b3; } /* Soft Orange */
+            100% { background-color: #ff6600; } /* Dark Orange */
+          }
+
+          @keyframes back-yellow{
+            /* Red Shades */
+            0% { background-color: #ffdd1b; } /* Light Yellow */
+            100% { background-color: #fbff1d; } /* Dark Yellow */
+          } 
+
+          @keyframes back-green{
+            /* Red Shades */
+            0% { background-color: #7fff7f; } /* Light Green */
+            100% { background-color: #218621; } /* Dark Green */
+          } 
+
+          @keyframes back-blue{
+            /* Red Shades */
+            0% { background-color: #86aeff; } /* Light Blue */
+            100% { background-color: #2a93fc; } /* Dark Blue */
+          }
+          
+          @keyframes back-purple{
+            /* Red Shades */
+            0% { background-color: #b889ff; } /* Light Purple */
+            100% { background-color: #6b31ce; } /* Dark Purple */
           }
