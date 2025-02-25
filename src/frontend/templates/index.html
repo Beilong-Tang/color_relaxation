@@ -52,6 +52,11 @@
 </head>
 <body>
     <div><h1>DKU Color Sound Text Relaxation System</h1></div>
+    <audio autoplay controls>
+      <source src="{{ url_for('static', filename='background.wav') }}" type="audio/mpeg">
+      Your browser does not support the audio element.
+    </audio>
+
     <form enctype="multipart/form-data">
         <input type="file" name="file" accept=".wav" required>
         <input type="text" name="text" required>
@@ -63,6 +68,7 @@
         <input type="text" id="user-input" placeholder="Ask for a color therapy...">
         <button id='generate-response-btn' class="button" onclick="generateResponse()">Ask</button>
     </div>
+
   
     <script id="backend-path" type="application/json">
         {{ backend_path|tojson }}
