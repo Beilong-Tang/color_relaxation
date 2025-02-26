@@ -49,8 +49,9 @@ class Text2AudioWrapper(Text2Audio):
             _r = self._generate_split(_sent)
             res.append(_r.squeeze(0)) # [T]
         res = torch.cat(res, dim = 0).unsqueeze(0) # [1,T]
-        torch.cuda.empty_cache()
         save_audio(res, output_path, 16000, True)
+        del res
+        torch.cuda.empty_cache()
     
     @torch.no_grad()
     def _generate_split(self, text:str):
