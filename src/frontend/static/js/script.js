@@ -159,8 +159,13 @@ document.addEventListener("DOMContentLoaded", function () {
                 console.log(element)
                 // Add text to it
                 console.log(data.response)
-                typeText(element,data.response)
-                insertAudioPlayer(data.response, data.color);
+                // typeText(element,data.response)
+                // insertAudioPlayer(data.response, data.color);
+                await Promise.all([typeText(element,data.response), insertAudioPlayer(data.response, data.color)]);
+                console.log("Done")
+                console.log(element)
+                element.innerHTML = data.response
+                
             } else {
                 chatBox.innerHTML += `<div class='chat-message'><b>Error:</b> ${data.error}</div>`;
             }
