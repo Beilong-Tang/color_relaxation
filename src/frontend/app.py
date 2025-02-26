@@ -46,5 +46,5 @@ def generate_audio():
 
 
 if __name__ == "__main__":
-    app.run('0.0.0.0', debug=True, port=5005)
+    app.run('0.0.0.0', debug=True, port=6005)
     pass
